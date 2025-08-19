@@ -20,5 +20,15 @@ from .Methods import redo_extension
 from .Methods import zip
 from .Methods import unzip
 
+# used when users uses "from ___ import *
+__all__ = [""]
+
+# Massma metadata
+__version__ = "1.0.0"
+__author__ = "SUBERNER"
+__license__ = "GNU v3"
+__url__ = "https://github.com/SUBERNER/Massma"
+__description__ = "Python library designed to provide game developers and modders a tool to shuffle and randomizer mass file data and to alter"
+
 
 
