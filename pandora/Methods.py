@@ -1,5 +1,5 @@
-from Pandora import random  # used for seeds
-import Pandora
+from pandora import random  # used for seeds
+import pandora
 import os
 import shutil
 import gc  # cleaner file handling
@@ -17,10 +17,10 @@ def seed(value: int) -> int:
     """
     try:
         random.seed(value)  # changed the randomness of the library
-        Pandora.Display.methods.result(os.getcwd(), "seed", "Unknown", value)
+        pandora.Display.methods.result(os.getcwd(), "seed", "Unknown", value)
         return value
     except Exception as e:
-        Pandora.Display.methods.result_error(os.getcwd(), "seed", e)
+        pandora.Display.methods.result_error(os.getcwd(), "seed", e)
         return value
 
 
@@ -44,11 +44,11 @@ def move(source: str | list[str], destination: str, *, garbage_collection: bool 
             gc.collect()  # Close any lingering file handles
 
         destination = shutil.move(source, destination)
-        Pandora.Display.methods.result(source, "move", os.path.abspath(source), os.path.abspath(destination))
+        pandora.Display.methods.result(source, "move", os.path.abspath(source), os.path.abspath(destination))
 
         return destination
     except Exception as e:
-        Pandora.Display.methods.result_error(source, "move", e)
+        pandora.Display.methods.result_error(source, "move", e)
         return source
 
 
@@ -76,11 +76,11 @@ def copy(source: str | list[str], destination: str, *, garbage_collection: bool 
         elif os.path.isdir(source):  # copying folders
             destination = shutil.copytree(source, destination)
 
-        Pandora.Display.methods.result(source, "copy", os.path.abspath(source), os.path.abspath(destination))
+        pandora.Display.methods.result(source, "copy", os.path.abspath(source), os.path.abspath(destination))
 
         return destination
     except Exception as e:
-        Pandora.Display.methods.result_error(source, "copy", e)
+        pandora.Display.methods.result_error(source, "copy", e)
         return source
 
 
@@ -102,14 +102,14 @@ def zip(source: str, extension: str) -> str:
         new_source = shutil.make_archive(source, extension, source)
 
         if not os.path.exists(source):  # checks if zip is being created form nothing
-            Pandora.Display.methods.result_warning(source, "zip", 'zipped file or folder created from nothing')
+            pandora.Display.methods.result_warning(source, "zip", 'zipped file or folder created from nothing')
             source = "None"
 
-        Pandora.Display.methods.result(original_source, "zip", os.path.basename(source), os.path.basename(new_source))
+        pandora.Display.methods.result(original_source, "zip", os.path.basename(source), os.path.basename(new_source))
 
         return new_source
     except Exception as e:
-        Pandora.Display.methods.result_error(original_source, "zip", e)
+        pandora.Display.methods.result_error(original_source, "zip", e)
         return original_source
 
 
@@ -127,11 +127,11 @@ def unzip(source: str) -> str:
         new_source = os.path.splitext(source)[0]  # removes the extension form the zip file
         shutil.unpack_archive(source, new_source)
 
-        Pandora.Display.methods.result(source, "unzip", os.path.basename(source), os.path.basename(new_source))
+        pandora.Display.methods.result(source, "unzip", os.path.basename(source), os.path.basename(new_source))
 
         return source
     except Exception as e:
-        Pandora.Display.methods.result_error(source, "unzip", e)
+        pandora.Display.methods.result_error(source, "unzip", e)
         return source
 
 
@@ -159,14 +159,14 @@ def delete(source: str, *, garbage_collection: bool = True) -> str | None:
             elif os.path.isdir(source):  # deletes folders
                 shutil.rmtree(source)
         else:  # if no file was found
-            Pandora.Display.methods.result_warning(original_source, "delete", 'file or folder dose not exist')
+            pandora.Display.methods.result_warning(original_source, "delete", 'file or folder dose not exist')
             source = None
 
-        Pandora.Display.methods.result(original_source, "delete", source, None)
+        pandora.Display.methods.result(original_source, "delete", source, None)
 
         return None
     except Exception as e:
-        Pandora.Display.methods.result_error(source, "delete", e)
+        pandora.Display.methods.result_error(source, "delete", e)
         return source
 
 
@@ -182,11 +182,11 @@ def create_folder(source: str) -> str | None:
     """
     try:
         os.mkdir(source)
-        Pandora.Display.methods.result(source, "create folder", None, source)
+        pandora.Display.methods.result(source, "create folder", None, source)
 
         return source
     except Exception as e:
-        Pandora.Display.methods.result_error(source, "create_folder", e)
+        pandora.Display.methods.result_error(source, "create_folder", e)
         return None
 
 
@@ -203,11 +203,11 @@ def create_file(source: str) -> str | None:
     try:
         with open(source, 'x'):
             pass  # creates file
-        Pandora.Display.methods.result(source, "create file", None, source)
+        pandora.Display.methods.result(source, "create file", None, source)
 
         return source
     except Exception as e:
-        Pandora.Display.methods.result_error(source, "create file", e)
+        pandora.Display.methods.result_error(source, "create file", e)
         return None
 
 
@@ -233,11 +233,11 @@ def redo_name(source: str, name: str, *, garbage_collection: bool = True) -> str
         new_source = os.path.join(os.path.dirname(source), name)
         os.rename(source, new_source)
 
-        Pandora.Display.methods.result(source, "redo name", os.path.basename(source), os.path.basename(new_source))
+        pandora.Display.methods.result(source, "redo name", os.path.basename(source), os.path.basename(new_source))
 
         return new_source
     except Exception as e:
-        Pandora.Display.methods.result_error(source, "redo name", e)
+        pandora.Display.methods.result_error(source, "redo name", e)
         return source
 
 
@@ -265,9 +265,9 @@ def redo_extension(source: str, extension: str, *, garbage_collection: bool = Tr
         new_source = sor + '.' + extension.replace('.', '')  # updated extension
         os.rename(source, new_source)
 
-        Pandora.Display.methods.result(source, "redo extension", os.path.basename(source), os.path.basename(new_source))
+        pandora.Display.methods.result(source, "redo extension", os.path.basename(source), os.path.basename(new_source))
 
         return new_source
     except Exception as e:
-        Pandora.Display.methods.result_error(source, "redo extension", e)
+        pandora.Display.methods.result_error(source, "redo extension", e)
         return source

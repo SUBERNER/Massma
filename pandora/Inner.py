@@ -1,7 +1,7 @@
 import re
-from Pandora import random  # used for seeds
-from Pandora.Filter import *
-import Pandora
+from pandora import random  # used for seeds
+from pandora.Filter import *
+import pandora
 import math
 
 def normal(files: str | list[str], contains: str | list[str], *, duplicate: bool = False, flatten: bool = False, preset: str | list[str] | None = None, preshuffle: int | list[int] | None = None, chance_files: float = 1, chance_contains: float = 1, chance_total: float = 1, chance_data: float = 1,
@@ -20,7 +20,7 @@ def normal(files: str | list[str], contains: str | list[str], *, duplicate: bool
 
             # gets size of the largest path for better result formatting
             file_paths = [os.path.abspath(file) for file in files]  # makes sures the full file path is given
-            Pandora.Display.inner.set_source_length(max(file_paths, key=len))
+            pandora.Display.inner.set_source_length(max(file_paths, key=len))
 
             hash_contain = f"{hash(contains[0])}"  # stores the hash of one of the contains to indicate where data is shuffled
             filtered_contains = []  # stores all the contains that will be used
@@ -76,7 +76,7 @@ def normal(files: str | list[str], contains: str | list[str], *, duplicate: bool
                             f.write(data)
 
                 except Exception as e:
-                    Pandora.Display.inner.result_error(file, "normal", e)
+                    pandora.Display.inner.result_error(file, "normal", e)
 
             # all of this below shuffles data inside files
             if preshuffle:  # preshuffle format on how the files will be shuffled and does not work with any duplicate based features
@@ -120,15 +120,15 @@ def normal(files: str | list[str], contains: str | list[str], *, duplicate: bool
                     data = f.read()  # stores all the data from the file
                     while data.count(hash_contain) > 0:  # continues loop until there are 0 hashes left
                         data = data.replace(hash_contain, random_matches[0], 1)
-                        Pandora.Display.inner.result(file, "normal", filtered_matches.pop(0), random_matches.pop(0))
+                        pandora.Display.inner.result(file, "normal", filtered_matches.pop(0), random_matches.pop(0))
 
                     # saves all the changes made
                     with open(file, 'w') as f:
                         f.write(data)
 
     except Exception as e:
-        Pandora.Display.inner.result_error(len(files), "normal", e)
-    Pandora.Display.inner.set_source_length(0)  # resets source length after a method ends
+        pandora.Display.inner.result_error(len(files), "normal", e)
+    pandora.Display.inner.set_source_length(0)  # resets source length after a method ends
 
 
 def group(files: str | list[str], contains: str | list[str], *, duplicate: bool = False, flatten: bool = False, preset: str | list[str] | None = None, preshuffle: int | list[int] | None = None, chance_files: float = 1, chance_total: float = 1, chance_data: float = 1,
@@ -147,7 +147,7 @@ def group(files: str | list[str], contains: str | list[str], *, duplicate: bool 
 
             # gets size of the largest path for better result formatting
             file_paths = [os.path.abspath(file) for file in files]  # makes sures the full file path is given
-            Pandora.Display.inner.set_source_length(max(file_paths, key=len))
+            pandora.Display.inner.set_source_length(max(file_paths, key=len))
 
             hash_contains = []  # stores the hash of each contain to indicate where data is shuffled in each group
             filtered_contains = []  # stores all the contains that will be used
@@ -229,7 +229,7 @@ def group(files: str | list[str], contains: str | list[str], *, duplicate: bool 
                             f.write(data)
 
                 except Exception as e:
-                    Pandora.Display.inner.result_error(file, "group", e)
+                    pandora.Display.inner.result_error(file, "group", e)
 
             # combines the group of matches into their own list allowing for easier shuffling and managing
             for group in zip(*filtered_groups):  # separates the groups and combines them into groups contains 1 of each contain
@@ -283,15 +283,15 @@ def group(files: str | list[str], contains: str | list[str], *, duplicate: bool 
                     while data.count(hash_contains[0]) > 0:  # continues loop until there are 0 hashes left
                         for index, hash_contain in enumerate(hash_contains): # used the index to get the correct match
                             data = data.replace(hash_contain, random_matches[0][index], 1)
-                        Pandora.Display.inner.result(file, "group", filtered_matches.pop(0), random_matches.pop(0))
+                        pandora.Display.inner.result(file, "group", filtered_matches.pop(0), random_matches.pop(0))
 
                     # saves all the changes made
                     with open(file, 'w') as f:
                         f.write(data)
 
     except Exception as e:
-        Pandora.Display.inner.result_error(len(files), "group", e)
-    Pandora.Display.inner.set_source_length(0)  # resets source length after a method ends
+        pandora.Display.inner.result_error(len(files), "group", e)
+    pandora.Display.inner.set_source_length(0)  # resets source length after a method ends
 
 
 def scale(files: str | list[str], contains: str | list[str], range: tuple[float, float] | tuple[int, int], *, fair_range: bool = False, decimals: bool = False, zeros: bool = True, rounding: int = 2, minmaxing: bool = False, minmax_matching: bool = True, clamp_matching: bool = True,
@@ -309,7 +309,7 @@ def scale(files: str | list[str], contains: str | list[str], range: tuple[float,
 
             # gets size of the largest path for better result formatting
             file_paths = [os.path.abspath(file) for file in files]  # makes sures the full file path is given
-            Pandora.Display.inner.set_source_length(max(file_paths, key=len))
+            pandora.Display.inner.set_source_length(max(file_paths, key=len))
 
             hash_contain = f"{hash(contains[0])}"  # stores the hash of one of the contains to indicate where data is swapped
             filtered_contains = []  # stores all the contains that will be used
@@ -437,7 +437,7 @@ def scale(files: str | list[str], contains: str | list[str], range: tuple[float,
                                 if reroll_attempts >= 10000:  # too many attempts where made, does not change the match and moves to the next filtered match
                                     # adds the none altered version of the match to be put back in the data
                                     altered_matches.append(filtered_match)  # adds the filtered match in as the other failed
-                                    Pandora.Display.inner.result_warning(file, "scale", 'value unaltered due to unfulfilled constraints')
+                                    pandora.Display.inner.result_warning(file, "scale", 'value unaltered due to unfulfilled constraints')
                                     break  # ends the while true loop, stopping the reroll loop
 
 
@@ -447,17 +447,17 @@ def scale(files: str | list[str], contains: str | list[str], range: tuple[float,
 
                             while data.count(hash_contain) > 0:  # continues loop until there are 0 hashes left
                                 data = data.replace(hash_contain, altered_matches[0], 1)
-                                Pandora.Display.inner.result(file, "scale", filtered_matches.pop(0), altered_matches.pop(0))
+                                pandora.Display.inner.result(file, "scale", filtered_matches.pop(0), altered_matches.pop(0))
 
                         with open(file, 'w') as f:  # saves changes made after all the scaling
                             f.write(data)
 
                 except Exception as e:
-                    Pandora.Display.inner.result_error(file, "scale", e)
+                    pandora.Display.inner.result_error(file, "scale", e)
 
     except Exception as e:
-        Pandora.Display.inner.result_error(len(files), "scale", e)
-    Pandora.Display.inner.set_source_length(0)  # resets source length after a method ends
+        pandora.Display.inner.result_error(len(files), "scale", e)
+    pandora.Display.inner.set_source_length(0)  # resets source length after a method ends
 
 def offset(files: str | list[str], contains: str | list[str], range: tuple[float, float] | tuple[int, int], *, fair_range: bool = False, decimals: bool = False, zeros: bool = True, rounding: int = 2, minmaxing: bool = False, minmax_matching: bool = True, clamp_matching: bool = True,
            clamps_outer: tuple[float, float] | tuple[int, int] | None = None, clamps_inner: tuple[float, float] | tuple[int, int] | None = None, chance_files: float = 1, chance_contains: float = 1, chance_total: float = 1, chance_data: float = 1,
@@ -474,7 +474,7 @@ def offset(files: str | list[str], contains: str | list[str], range: tuple[float
 
             # gets size of the largest path for better result formatting
             file_paths = [os.path.abspath(file) for file in files]  # makes sures the full file path is given
-            Pandora.Display.inner.set_source_length(max(file_paths, key=len))
+            pandora.Display.inner.set_source_length(max(file_paths, key=len))
 
             hash_contain = f"{hash(contains[0])}"  # stores the hash of one of the contains to indicate where data is swapped
             filtered_contains = []  # stores all the contains that will be used
@@ -608,7 +608,7 @@ def offset(files: str | list[str], contains: str | list[str], range: tuple[float
                                 if reroll_attempts >= 10000:  # too many attempts where made, does not change the match and moves to the next filtered match
                                     # adds the none altered version of the match to be put back in the data
                                     altered_matches.append(filtered_match)  # adds the filtered match in as the other failed
-                                    Pandora.Display.inner.result_warning(file, "offset", 'value unaltered due to unfulfilled constraints')
+                                    pandora.Display.inner.result_warning(file, "offset", 'value unaltered due to unfulfilled constraints')
                                     break  # ends the while true loop, stopping the reroll loop
 
 
@@ -618,15 +618,15 @@ def offset(files: str | list[str], contains: str | list[str], range: tuple[float
 
                             while data.count(hash_contain) > 0:  # continues loop until there are 0 hashes left
                                 data = data.replace(hash_contain, altered_matches[0], 1)
-                                Pandora.Display.inner.result(file, "offset", filtered_matches.pop(0), altered_matches.pop(0))
+                                pandora.Display.inner.result(file, "offset", filtered_matches.pop(0), altered_matches.pop(0))
 
                         with open(file, 'w') as f:  # saves changes made after all the scaling
                             f.write(data)
 
                 except Exception as e:
-                    Pandora.Display.inner.result_error(file, "offset", e)
+                    pandora.Display.inner.result_error(file, "offset", e)
 
     except Exception as e:
-        Pandora.Display.inner.result_error(len(files), "offset", e)
-    Pandora.Display.inner.set_source_length(0)  # resets source length after a method ends
+        pandora.Display.inner.result_error(len(files), "offset", e)
+    pandora.Display.inner.set_source_length(0)  # resets source length after a method ends
 

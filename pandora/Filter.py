@@ -1,4 +1,4 @@
-import Pandora
+import pandora
 import re
 import os
 from enum import IntEnum
@@ -41,11 +41,11 @@ class Ignore:
         try:
             for files in self.__files:
                 if file == files:
-                    Pandora.Display.filter.result(os.path.abspath(file), "ignore", file, ''.join(char + '\u0336' for char in file))
+                    pandora.Display.filter.result(os.path.abspath(file), "ignore", file, ''.join(char + '\u0336' for char in file))
                     return True
             return False
         except Exception as e:
-            Pandora.Display.filter.result_error(os.path.abspath(file), "ignore", str(e))
+            pandora.Display.filter.result_error(os.path.abspath(file), "ignore", str(e))
             return False
 
 
@@ -150,11 +150,11 @@ class Exclude:
                         result = False  # default case
 
                     if result:
-                        Pandora.Display.filter.result(os.path.abspath(file), "exclude", file, ''.join(char + '\u0336' for char in file))
+                        pandora.Display.filter.result(os.path.abspath(file), "exclude", file, ''.join(char + '\u0336' for char in file))
                     return result
             return False
         except Exception as e:
-            Pandora.Display.filter.result_error(os.path.abspath(file), "exclude", str(e))
+            pandora.Display.filter.result_error(os.path.abspath(file), "exclude", str(e))
             return False
 
 
@@ -273,7 +273,7 @@ class Alter:
                                 with open(replace_file, "w") as f:
                                     for old, new in self.__replace_strings:
                                         text = re.sub(old, new, text)
-                                        Pandora.Display.filter.result(os.path.abspath(replace_file), "alter", old, new)  # DISPLAYS CHANGED IT DOSE NOT ALWAYS MAKE
+                                        pandora.Display.filter.result(os.path.abspath(replace_file), "alter", old, new)  # DISPLAYS CHANGED IT DOSE NOT ALWAYS MAKE
                                     f.write(text)
 
                         else:
@@ -283,11 +283,11 @@ class Alter:
                             with open(file, "w") as f:
                                 for old, new in self.__replace_strings:
                                     text = re.sub(old, new, text)
-                                    Pandora.Display.filter.result(os.path.abspath(file), "alter", old, new)  # DISPLAYS CHANGED IT DOSE NOT ALWAYS MAKE
+                                    pandora.Display.filter.result(os.path.abspath(file), "alter", old, new)  # DISPLAYS CHANGED IT DOSE NOT ALWAYS MAKE
                                 f.write(text)
 
         except Exception as e:
-            Pandora.Display.filter.result_error(os.path.abspath(file), "alter", str(e))
+            pandora.Display.filter.result_error(os.path.abspath(file), "alter", str(e))
 
 
 class Input:
@@ -358,11 +358,11 @@ class Input:
                         result = False
 
                     if result:
-                        Pandora.Display.filter.result(os.path.abspath(file), "input", input, ''.join(char + '\u0336' for char in input))
+                        pandora.Display.filter.result(os.path.abspath(file), "input", input, ''.join(char + '\u0336' for char in input))
                     return result
             return False
         except Exception as e:
-            Pandora.Display.filter.result_error(os.path.abspath(file), "input", str(e))
+            pandora.Display.filter.result_error(os.path.abspath(file), "input", str(e))
             return False
 
 
@@ -389,7 +389,7 @@ class Swap:
         try:
             for index, file in enumerate(self.__files):
                 os.rename(file[0], file[1])
-                Pandora.Display.filter.result(os.path.abspath(file[0]), "swap", os.path.abspath(file[0]), os.path.abspath(file[1]))
+                pandora.Display.filter.result(os.path.abspath(file[0]), "swap", os.path.abspath(file[0]), os.path.abspath(file[1]))
                 self.__files[index] = (file[1], file[0])  # swaps them to and swaps back to normal once its recalled
         except Exception as e:
-            Pandora.Display.filter.result_error(os.path.abspath(file[0]), "swap", str(e))
+            pandora.Display.filter.result_error(os.path.abspath(file[0]), "swap", str(e))

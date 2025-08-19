@@ -1,6 +1,6 @@
-from Pandora import random  # used for seeds
-from Pandora.Filter import *
-import Pandora
+from pandora import random  # used for seeds
+from pandora.Filter import *
+import pandora
 import ffmpeg
 import tempfile
 import os
@@ -18,7 +18,7 @@ def volume(files: str | list[str], factor: float, *, mask: tuple[float,float] | 
 
             # gets size of the largest path for better result formatting
             files = [os.path.abspath(file) for file in files]  # makes sure files are converted into the full bath for better displaying
-            Pandora.Display.audio.set_source_length(max(files, key=len))
+            pandora.Display.audio.set_source_length(max(files, key=len))
 
             for file in files:
                 try:
@@ -58,13 +58,13 @@ def volume(files: str | list[str], factor: float, *, mask: tuple[float,float] | 
                         new_audio.output(temp_file).overwrite_output().run(quiet=True) # overwrite original file with changes
                         os.replace(temp_file, file)  # overwrites the old data with th new audio data
 
-                        Pandora.Display.audio.result(file, "volume", 1 , factor)
+                        pandora.Display.audio.result(file, "volume", 1 , factor)
 
                 except Exception as e:
-                    Pandora.Display.audio.result_error(file, "volume", e)
+                    pandora.Display.audio.result_error(file, "volume", e)
 
     except Exception as e:
-        Pandora.Display.audio.result_error(len(files), "volume", e)
+        pandora.Display.audio.result_error(len(files), "volume", e)
 
 
 def normalize(files: str | list[str], *, mask: tuple[float,float], chance_files: float = 1, chance_total: float = 1,
@@ -79,7 +79,7 @@ def normalize(files: str | list[str], *, mask: tuple[float,float], chance_files:
 
             # gets size of the largest path for better result formatting
             files = [os.path.abspath(file) for file in files]  # makes sure files are converted into the full bath for better displaying
-            Pandora.Display.audio.set_source_length(max(files, key=len))
+            pandora.Display.audio.set_source_length(max(files, key=len))
 
             for file in files:
                 try:
@@ -119,13 +119,13 @@ def normalize(files: str | list[str], *, mask: tuple[float,float], chance_files:
                         new_audio.output(temp_file).overwrite_output().run(quiet=True)  # overwrite original file with changes
                         os.replace(temp_file, file)  # overwrites the old data with th new audio data
 
-                        Pandora.Display.audio.result(file, "normalize", False, True)
+                        pandora.Display.audio.result(file, "normalize", False, True)
 
                 except Exception as e:
-                    Pandora.Display.audio.result_error(file, "normalize", e)
+                    pandora.Display.audio.result_error(file, "normalize", e)
 
     except Exception as e:
-        Pandora.Display.audio.result_error(len(files), "normalize", e)
+        pandora.Display.audio.result_error(len(files), "normalize", e)
 
 
 def reverse(files: str | list[str], *, mask: tuple[float,float], chance_files: float = 1, chance_total: float = 1,
@@ -140,7 +140,7 @@ def reverse(files: str | list[str], *, mask: tuple[float,float], chance_files: f
 
             # gets size of the largest path for better result formatting
             files = [os.path.abspath(file) for file in files]  # makes sure files are converted into the full bath for better displaying
-            Pandora.Display.audio.set_source_length(max(files, key=len))
+            pandora.Display.audio.set_source_length(max(files, key=len))
 
             for file in files:
                 try:
@@ -180,13 +180,13 @@ def reverse(files: str | list[str], *, mask: tuple[float,float], chance_files: f
                         new_audio.output(temp_file).overwrite_output().run(quiet=True)  # overwrite original file with changes
                         os.replace(temp_file, file)  # overwrites the old data with th new audio data
 
-                        Pandora.Display.audio.result(file, "reverse", False, True)
+                        pandora.Display.audio.result(file, "reverse", False, True)
 
                 except Exception as e:
-                    Pandora.Display.audio.result_error(file, "reverse", e)
+                    pandora.Display.audio.result_error(file, "reverse", e)
 
     except Exception as e:
-        Pandora.Display.audio.result_error(len(files), "reverse", e)
+        pandora.Display.audio.result_error(len(files), "reverse", e)
 
 
 def pitch(files: str | list[str], factor: float, *, mask: tuple[float,float], chance_files: float = 1, chance_total: float = 1,
@@ -201,7 +201,7 @@ def pitch(files: str | list[str], factor: float, *, mask: tuple[float,float], ch
 
             # gets size of the largest path for better result formatting
             files = [os.path.abspath(file) for file in files]  # makes sure files are converted into the full bath for better displaying
-            Pandora.Display.audio.set_source_length(max(files, key=len))
+            pandora.Display.audio.set_source_length(max(files, key=len))
 
             for file in files:
                 try:
@@ -242,14 +242,14 @@ def pitch(files: str | list[str], factor: float, *, mask: tuple[float,float], ch
                         new_audio.output(temp_file).overwrite_output().run(quiet=True)  # overwrite original file with changes
                         os.replace(temp_file, file)  # overwrites the old data with th new audio data
 
-                        Pandora.Display.audio.result(file, "pitch", 1, factor)
+                        pandora.Display.audio.result(file, "pitch", 1, factor)
 
 
                 except Exception as e:
-                    Pandora.Display.audio.result_error(len(files), "pitch", e)
+                    pandora.Display.audio.result_error(len(files), "pitch", e)
 
     except Exception as e:
-        Pandora.Display.audio.result_error(len(files), "pitch", e)
+        pandora.Display.audio.result_error(len(files), "pitch", e)
 
 def tempo(files: str | list[str], factor: float, *, mask: tuple[float,float], chance_files: float = 1, chance_total: float = 1,
           ignores: Ignore | list[Ignore] | None = None, excludes: Exclude | list[Exclude] | None = None, alters: Alter | list[Alter] | None = None):
@@ -263,7 +263,7 @@ def tempo(files: str | list[str], factor: float, *, mask: tuple[float,float], ch
 
             # gets size of the largest path for better result formatting
             files = [os.path.abspath(file) for file in files]  # makes sure files are converted into the full bath for better displaying
-            Pandora.Display.audio.set_source_length(max(files, key=len))
+            pandora.Display.audio.set_source_length(max(files, key=len))
 
             for file in files:
                 try:
@@ -303,10 +303,10 @@ def tempo(files: str | list[str], factor: float, *, mask: tuple[float,float], ch
                         new_audio.output(temp_file).overwrite_output().run(quiet=True)  # overwrite original file with changes
                         os.replace(temp_file, file)  # overwrites the old data with th new audio data
 
-                        Pandora.Display.audio.result(file, "tempo", 1, factor)
+                        pandora.Display.audio.result(file, "tempo", 1, factor)
 
                 except Exception as e:
-                    Pandora.Display.audio.result_error(len(files), "tempo", e)
+                    pandora.Display.audio.result_error(len(files), "tempo", e)
 
     except Exception as e:
-        Pandora.Display.audio.result_error(len(files), "tempo", e)
+        pandora.Display.audio.result_error(len(files), "tempo", e)

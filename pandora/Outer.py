@@ -1,6 +1,6 @@
-from Pandora import random  # used for seeds
-from Pandora.Filter import *
-import Pandora
+from pandora import random  # used for seeds
+from pandora.Filter import *
+import pandora
 
 def normal(files: str | list[str], *, preshuffle: list[int] | None = None, chance_files: float = 1, chance_total: float = 1,
            ignores: Ignore | list[Ignore] | None = None, excludes: Exclude | list[Exclude] | None = None, alters: Alter | list[Alter] | None = None):
@@ -27,7 +27,7 @@ def normal(files: str | list[str], *, preshuffle: list[int] | None = None, chanc
 
             # gets size of the largest path for better result formatting
             file_paths = [os.path.abspath(file) for file in files]  # makes sures the full file path is given
-            Pandora.Display.outer.set_source_length(max(file_paths, key=len))
+            pandora.Display.outer.set_source_length(max(file_paths, key=len))
 
             hash_files = []  # stores all files in their hash format
             filtered_files = []  # stores all files after chances and filters
@@ -56,7 +56,7 @@ def normal(files: str | list[str], *, preshuffle: list[int] | None = None, chanc
                         filtered_files.append(None)  # notify system that file name will not be used in the shuffle
 
                 except Exception as e:
-                    Pandora.Display.outer.result_error(file, "normal", e)
+                    pandora.Display.outer.result_error(file, "normal", e)
 
             # shuffles files
             # PROGRAM IS CURRENTLY PICKY ABOUT LIST SIZES, THEY ALL MUST BE THE SAME
@@ -81,11 +81,11 @@ def normal(files: str | list[str], *, preshuffle: list[int] | None = None, chanc
             # alters files
             for hash_file, new_file, original_file in zip(hash_files, random_files, filtered_files):
                 os.rename(os.path.abspath(hash_file), os.path.abspath(new_file))  # renames file
-                Pandora.Display.outer.result(os.path.abspath(original_file), "normal", os.path.basename(original_file), os.path.basename(new_file)) # displays changed
+                pandora.Display.outer.result(os.path.abspath(original_file), "normal", os.path.basename(original_file), os.path.basename(new_file)) # displays changed
 
     except Exception as e:
-        Pandora.Display.outer.result_error(len(files), "normal", e)
-    Pandora.Display.inner.set_source_length(0)  # resets source length after a method ends
+        pandora.Display.outer.result_error(len(files), "normal", e)
+    pandora.Display.inner.set_source_length(0)  # resets source length after a method ends
 
 
 def group(files: str | list[str], contains: str | list[str], *, preshuffle: list[int] | None = None, preset: str | list[str] | None = None, chance_files: float = 1, chance_contains: float = 1, chance_total: float = 1,
@@ -117,7 +117,7 @@ def group(files: str | list[str], contains: str | list[str], *, preshuffle: list
 
             # gets size of the largest path for better result formatting
             file_paths = [os.path.abspath(file) for file in files]  # makes sures the full file path is given
-            Pandora.Display.outer.set_source_length(max(file_paths, key=len))
+            pandora.Display.outer.set_source_length(max(file_paths, key=len))
 
             hash_contains = []  # stores all contains in their hash format
             hash_files = []  # stores all files in their hash format
@@ -158,7 +158,7 @@ def group(files: str | list[str], contains: str | list[str], *, preshuffle: list
                                 filtered_files.append(file)
 
                 except Exception as e:
-                    Pandora.Display.outer.result_error(file, "group", e)
+                    pandora.Display.outer.result_error(file, "group", e)
 
             # shuffles files
             # PROGRAM IS CURRENTLY PICKY ABOUT LIST SIZES, THEY ALL MUST BE THE SAME
@@ -194,8 +194,8 @@ def group(files: str | list[str], contains: str | list[str], *, preshuffle: list
                     if hash_contain in hash_file:  # finding the correct group
                         new_name = os.path.basename(hash_file).replace(hash_contain, random_contain)
                         os.rename(os.path.abspath(hash_file), os.path.abspath(os.path.join(os.path.dirname(hash_file), new_name)))  # renames file
-                        Pandora.Display.outer.result(os.path.abspath(original_file), "group", os.path.basename(original_file), new_name)  # displays changed
+                        pandora.Display.outer.result(os.path.abspath(original_file), "group", os.path.basename(original_file), new_name)  # displays changed
 
     except Exception as e:
-        Pandora.Display.outer.result_error(len(files), "group", e)
-    Pandora.Display.inner.set_source_length(0)  # resets source length after a method ends
+        pandora.Display.outer.result_error(len(files), "group", e)
+    pandora.Display.inner.set_source_length(0)  # resets source length after a method ends

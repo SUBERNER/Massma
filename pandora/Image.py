@@ -1,8 +1,6 @@
-from pickletools import optimize
-
-from Pandora import random  # used for seeds
-from Pandora.Filter import *
-import Pandora
+from pandora import random  # used for seeds
+from pandora.Filter import *
+import pandora
 import numpy
 from PIL import Image, ImageEnhance, ImageFilter, ImageOps  # Pillow
 
@@ -17,7 +15,7 @@ def create(files: str| list[str], *, mode: str = "RGBA", size: tuple[int,int] = 
 
             # gets size of the largest path for better result formatting
             file_paths = [os.path.abspath(file) for file in files]  # makes sures the full file path is given
-            Pandora.Display.image.set_source_length(max(file_paths, key=len))
+            pandora.Display.image.set_source_length(max(file_paths, key=len))
 
             for file in files:
                 try:
@@ -28,14 +26,14 @@ def create(files: str| list[str], *, mode: str = "RGBA", size: tuple[int,int] = 
                             image = Image.new(mode, size, color)
                             image.save(file, optimize=optimize)
 
-                            Pandora.Display.image.result(file, "create photo", None, file)
+                            pandora.Display.image.result(file, "create photo", None, file)
 
                 except Exception as e:
-                    Pandora.Display.image.result_error(file, "create", e)
+                    pandora.Display.image.result_error(file, "create", e)
 
     except Exception as e:
-        Pandora.Display.image.result_error(len(files), "create", e)
-    Pandora.Display.image.set_source_length(0)  # resets source length after a method ends
+        pandora.Display.image.result_error(len(files), "create", e)
+    pandora.Display.image.set_source_length(0)  # resets source length after a method ends
 
 
 
@@ -50,7 +48,7 @@ def saturation(files: str | list[str], factor: float, *, optimize: bool = False,
 
             # gets size of the largest path for better result formatting
             file_paths = [os.path.abspath(file) for file in files]  # makes sures the full file path is given
-            Pandora.Display.image.set_source_length(max(file_paths, key=len))
+            pandora.Display.image.set_source_length(max(file_paths, key=len))
 
             for file in files:
                 try:
@@ -76,14 +74,14 @@ def saturation(files: str | list[str], factor: float, *, optimize: bool = False,
 
                             new_image.save(file, optimize=optimize)  # saves image
 
-                            Pandora.Display.image.result(file, "saturation", 0, factor)
+                            pandora.Display.image.result(file, "saturation", 0, factor)
 
                 except Exception as e:
-                    Pandora.Display.image.result_error(file, "saturation", e)
+                    pandora.Display.image.result_error(file, "saturation", e)
 
     except Exception as e:
-        Pandora.Display.image.result_error(len(files), "saturation", e)
-    Pandora.Display.image.set_source_length(0)  # resets source length after a method ends
+        pandora.Display.image.result_error(len(files), "saturation", e)
+    pandora.Display.image.set_source_length(0)  # resets source length after a method ends
 
 
 def contrast(files: str | list[str], factor: float, *, optimize: bool = False, masks: str | list[str] | None = None, resampling: int = 3, chance_files: float = 1, chance_masks: float = 1, chance_total: float = 1,
@@ -96,7 +94,7 @@ def contrast(files: str | list[str], factor: float, *, optimize: bool = False, m
             masks = masks if isinstance(masks, list) else ([masks] if masks else [])
 
             # gets size of the largest path for better result formatting
-            Pandora.Display.image.set_source_length(max(files, key=len))
+            pandora.Display.image.set_source_length(max(files, key=len))
 
             for file in files:
                 try:
@@ -122,14 +120,14 @@ def contrast(files: str | list[str], factor: float, *, optimize: bool = False, m
 
                             new_image.save(file, optimize=optimize)  # saves image
 
-                            Pandora.Display.image.result(file, "contrast", 0, factor)
+                            pandora.Display.image.result(file, "contrast", 0, factor)
 
                 except Exception as e:
-                    Pandora.Display.image.result_error(file, "contrast", e)
+                    pandora.Display.image.result_error(file, "contrast", e)
 
     except Exception as e:
-        Pandora.Display.image.result_error(len(files), "contrast", e)
-    Pandora.Display.image.set_source_length(0)  # resets source length after a method ends
+        pandora.Display.image.result_error(len(files), "contrast", e)
+    pandora.Display.image.set_source_length(0)  # resets source length after a method ends
 
 
 def brightness(files: str | list[str], factor: float, *, optimize: bool = False, masks: str | list[str] | None = None, resampling: int = 3, chance_files: float = 1, chance_masks: float = 1, chance_total: float = 1,
@@ -143,7 +141,7 @@ def brightness(files: str | list[str], factor: float, *, optimize: bool = False,
 
             # gets size of the largest path for better result formatting
             file_paths = [os.path.abspath(file) for file in files]  # makes sures the full file path is given
-            Pandora.Display.image.set_source_length(max(file_paths, key=len))
+            pandora.Display.image.set_source_length(max(file_paths, key=len))
 
             for file in files:
                 try:
@@ -169,14 +167,14 @@ def brightness(files: str | list[str], factor: float, *, optimize: bool = False,
 
                             new_image.save(file, optimize=optimize)  # saves image
 
-                            Pandora.Display.image.result(file, "brightness", 0, factor)
+                            pandora.Display.image.result(file, "brightness", 0, factor)
 
                 except Exception as e:
-                    Pandora.Display.image.result_error(file, "brightness", e)
+                    pandora.Display.image.result_error(file, "brightness", e)
 
     except Exception as e:
-        Pandora.Display.image.result_error(len(files), "brightness", e)
-    Pandora.Display.image.set_source_length(0)  # resets source length after a method ends
+        pandora.Display.image.result_error(len(files), "brightness", e)
+    pandora.Display.image.set_source_length(0)  # resets source length after a method ends
 
 
 def sharpness(files: str | list[str], factor: float, *, optimize: bool = False, masks: str | list[str] | None = None, resampling: int = 3, chance_files: float = 1, chance_masks: float = 1, chance_total: float = 1,
@@ -190,7 +188,7 @@ def sharpness(files: str | list[str], factor: float, *, optimize: bool = False, 
 
             # gets size of the largest path for better result formatting
             file_paths = [os.path.abspath(file) for file in files]  # makes sures the full file path is given
-            Pandora.Display.image.set_source_length(max(file_paths, key=len))
+            pandora.Display.image.set_source_length(max(file_paths, key=len))
 
             for file in files:
                 try:
@@ -216,14 +214,14 @@ def sharpness(files: str | list[str], factor: float, *, optimize: bool = False, 
 
                             new_image.save(file, optimize=optimize)  # saves image
 
-                            Pandora.Display.image.result(file, "sharpness", 0, factor)
+                            pandora.Display.image.result(file, "sharpness", 0, factor)
 
                 except Exception as e:
-                    Pandora.Display.image.result_error(file, "sharpness", e)
+                    pandora.Display.image.result_error(file, "sharpness", e)
 
     except Exception as e:
-        Pandora.Display.image.result_error(len(files), "sharpness", e)
-    Pandora.Display.image.set_source_length(0)  # resets source length after a method ends
+        pandora.Display.image.result_error(len(files), "sharpness", e)
+    pandora.Display.image.set_source_length(0)  # resets source length after a method ends
 
 
 def invert(files: str | list[str], *, optimize: bool = False, masks: str | list[str] | None = None, resampling: int = 3, chance_files: float = 1, chance_masks: float = 1, chance_total: float = 1,
@@ -237,7 +235,7 @@ def invert(files: str | list[str], *, optimize: bool = False, masks: str | list[
 
             # gets size of the largest path for better result formatting
             file_paths = [os.path.abspath(file) for file in files]  # makes sures the full file path is given
-            Pandora.Display.image.set_source_length(max(file_paths, key=len))
+            pandora.Display.image.set_source_length(max(file_paths, key=len))
 
             for file in files:
                 try:
@@ -263,14 +261,14 @@ def invert(files: str | list[str], *, optimize: bool = False, masks: str | list[
 
                             new_image.save(file, optimize=optimize)  # saves image
 
-                            Pandora.Display.image.result(file, "invert", False, True)
+                            pandora.Display.image.result(file, "invert", False, True)
 
                 except Exception as e:
-                    Pandora.Display.image.result_error(file, "invert", e)
+                    pandora.Display.image.result_error(file, "invert", e)
 
     except Exception as e:
-        Pandora.Display.image.result_error(len(files), "invert", e)
-    Pandora.Display.image.set_source_length(0)  # resets source length after a method ends
+        pandora.Display.image.result_error(len(files), "invert", e)
+    pandora.Display.image.set_source_length(0)  # resets source length after a method ends
 
 
 def flip(files: str | list[str], *, optimize: bool = False, chance_files: float = 1, chance_total: float = 1,
@@ -283,7 +281,7 @@ def flip(files: str | list[str], *, optimize: bool = False, chance_files: float 
 
             # gets size of the largest path for better result formatting
             file_paths = [os.path.abspath(file) for file in files]  # makes sures the full file path is given
-            Pandora.Display.image.set_source_length(max(file_paths, key=len))
+            pandora.Display.image.set_source_length(max(file_paths, key=len))
 
             for file in files:
                 try:
@@ -295,14 +293,14 @@ def flip(files: str | list[str], *, optimize: bool = False, chance_files: float 
                             new_image = image.transpose(Image.Transpose.FLIP_TOP_BOTTOM)  # alters image
                             new_image.save(file, optimize=optimize)  # saves image
 
-                            Pandora.Display.image.result(file, "flip", False, True)
+                            pandora.Display.image.result(file, "flip", False, True)
 
                 except Exception as e:
-                    Pandora.Display.image.result_error(file, "flip", e)
+                    pandora.Display.image.result_error(file, "flip", e)
 
     except Exception as e:
-        Pandora.Display.image.result_error(len(files), "flip", e)
-    Pandora.Display.image.set_source_length(0)  # resets source length after a method ends
+        pandora.Display.image.result_error(len(files), "flip", e)
+    pandora.Display.image.set_source_length(0)  # resets source length after a method ends
 
 
 def mirror(files: str | list[str], *, optimize: bool = False, chance_files: float = 1, chance_total: float = 1,
@@ -315,7 +313,7 @@ def mirror(files: str | list[str], *, optimize: bool = False, chance_files: floa
 
             # gets size of the largest path for better result formatting
             file_paths = [os.path.abspath(file) for file in files]  # makes sures the full file path is given
-            Pandora.Display.image.set_source_length(max(file_paths, key=len))
+            pandora.Display.image.set_source_length(max(file_paths, key=len))
 
             for file in files:
                 try:
@@ -327,14 +325,14 @@ def mirror(files: str | list[str], *, optimize: bool = False, chance_files: floa
                             new_image = image.transpose(Image.Transpose.FLIP_LEFT_RIGHT)  # alters image
                             new_image.save(file, optimize=optimize)  # saves image
 
-                            Pandora.Display.image.result(file, "mirror", False, True)
+                            pandora.Display.image.result(file, "mirror", False, True)
 
                 except Exception as e:
-                    Pandora.Display.image.result_error(file, "mirror", e)
+                    pandora.Display.image.result_error(file, "mirror", e)
 
     except Exception as e:
-        Pandora.Display.image.result_error(len(files), "mirror", e)
-    Pandora.Display.image.set_source_length(0)  # resets source length after a method ends
+        pandora.Display.image.result_error(len(files), "mirror", e)
+    pandora.Display.image.set_source_length(0)  # resets source length after a method ends
 
 
 def rotate(files: str | list[str], degree: int, *, optimize: bool = False, resampling: int = 3, expand: bool = False, chance_files: float = 1, chance_total: float = 1,
@@ -347,7 +345,7 @@ def rotate(files: str | list[str], degree: int, *, optimize: bool = False, resam
 
             # gets size of the largest path for better result formatting
             file_paths = [os.path.abspath(file) for file in files]  # makes sures the full file path is given
-            Pandora.Display.image.set_source_length(max(file_paths, key=len))
+            pandora.Display.image.set_source_length(max(file_paths, key=len))
 
             for file in files:
                 try:
@@ -359,14 +357,14 @@ def rotate(files: str | list[str], degree: int, *, optimize: bool = False, resam
                             new_image = image.rotate(-degree, expand=expand, resample=resampling)  # alters image
                             new_image.save(file, optimize=optimize)  # saves image
 
-                            Pandora.Display.image.result(file, "rotate", 0, degree)
+                            pandora.Display.image.result(file, "rotate", 0, degree)
 
                 except Exception as e:
-                    Pandora.Display.image.result_error(file, "rotate", e)
+                    pandora.Display.image.result_error(file, "rotate", e)
 
     except Exception as e:
-        Pandora.Display.image.result_error(len(files), "rotate", e)
-    Pandora.Display.image.set_source_length(0)  # resets source length after a method ends
+        pandora.Display.image.result_error(len(files), "rotate", e)
+    pandora.Display.image.set_source_length(0)  # resets source length after a method ends
 
 
 def layer(files: str | list[str], layers: str | list[str], position: tuple[int,int], *, optimize: bool = False, masks: str | list[str] | None = None, resampling: int = 3, chance_files: float = 1, chance_masks: float = 1, chance_total: float = 1,
@@ -381,7 +379,7 @@ def layer(files: str | list[str], layers: str | list[str], position: tuple[int,i
 
             # gets size of the largest path for better result formatting
             file_paths = [os.path.abspath(file) for file in files]  # makes sures the full file path is given
-            Pandora.Display.image.set_source_length(max(file_paths, key=len))
+            pandora.Display.image.set_source_length(max(file_paths, key=len))
 
             for file in files:
                 try:
@@ -409,14 +407,14 @@ def layer(files: str | list[str], layers: str | list[str], position: tuple[int,i
 
                             new_image.save(file, optimize=optimize)
 
-                            Pandora.Display.image.result(file, "layer", False, True)
+                            pandora.Display.image.result(file, "layer", False, True)
 
                 except Exception as e:
-                    Pandora.Display.image.result_error(file, "layer", e)
+                    pandora.Display.image.result_error(file, "layer", e)
 
     except Exception as e:
-        Pandora.Display.image.result_error(len(files), "layer", e)
-    Pandora.Display.image.set_source_length(0)  # resets source length after a method ends
+        pandora.Display.image.result_error(len(files), "layer", e)
+    pandora.Display.image.set_source_length(0)  # resets source length after a method ends
 
 
 def crop(files: str | list[str], dimensions: tuple[int, int, int, int], *, optimize: bool = False, chance_files: float = 1, chance_total: float = 1,
@@ -429,7 +427,7 @@ def crop(files: str | list[str], dimensions: tuple[int, int, int, int], *, optim
 
             # gets size of the largest path for better result formatting
             file_paths = [os.path.abspath(file) for file in files]  # makes sures the full file path is given
-            Pandora.Display.image.set_source_length(max(file_paths, key=len))
+            pandora.Display.image.set_source_length(max(file_paths, key=len))
 
             for file in files:
                 try:
@@ -441,14 +439,14 @@ def crop(files: str | list[str], dimensions: tuple[int, int, int, int], *, optim
                             new_image = image.crop(dimensions)
                             new_image.save(file, optimize=optimize)  # saves image
 
-                            Pandora.Display.image.result(file, "crop", image.size, new_image.size)
+                            pandora.Display.image.result(file, "crop", image.size, new_image.size)
 
                 except Exception as e:
-                    Pandora.Display.image.result_error(file, "crop", e)
+                    pandora.Display.image.result_error(file, "crop", e)
 
     except Exception as e:
-        Pandora.Display.image.result_error(len(files), "crop", e)
-    Pandora.Display.image.set_source_length(0)  # resets source length after a method ends
+        pandora.Display.image.result_error(len(files), "crop", e)
+    pandora.Display.image.set_source_length(0)  # resets source length after a method ends
 
 
 def noise(files: str | list[str], mean: float, standard_deviation: float, *, optimize: bool = False, masks: str | list[str] | None = None, resampling: int = 3, chance_files: float = 1, chance_masks: float = 1, chance_total: float = 1,
@@ -462,7 +460,7 @@ def noise(files: str | list[str], mean: float, standard_deviation: float, *, opt
 
             # gets size of the largest path for better result formatting
             file_paths = [os.path.abspath(file) for file in files]  # makes sures the full file path is given
-            Pandora.Display.image.set_source_length(max(file_paths, key=len))
+            pandora.Display.image.set_source_length(max(file_paths, key=len))
 
             for file in files:
                 try:
@@ -494,14 +492,14 @@ def noise(files: str | list[str], mean: float, standard_deviation: float, *, opt
 
                             new_image.save(file, optimize=optimize)  # saves image
 
-                            Pandora.Display.image.result(file, "noise", [0, 0], [mean, standard_deviation])
+                            pandora.Display.image.result(file, "noise", [0, 0], [mean, standard_deviation])
 
                 except Exception as e:
-                    Pandora.Display.image.result_error(file, "noise", e)
+                    pandora.Display.image.result_error(file, "noise", e)
 
     except Exception as e:
-        Pandora.Display.image.result_error(len(files), "noise", e)
-    Pandora.Display.image.set_source_length(0)  # resets source length after a method ends
+        pandora.Display.image.result_error(len(files), "noise", e)
+    pandora.Display.image.set_source_length(0)  # resets source length after a method ends
 
 
 def blur(files: str | list[str], factor: float, *, optimize: bool = False, masks: str | list[str] | None = None, resampling: int = 3, chance_files: float = 1, chance_masks: float = 1, chance_total: float = 1,
@@ -515,7 +513,7 @@ def blur(files: str | list[str], factor: float, *, optimize: bool = False, masks
 
             # gets size of the largest path for better result formatting
             file_paths = [os.path.abspath(file) for file in files]  # makes sures the full file path is given
-            Pandora.Display.image.set_source_length(max(file_paths, key=len))
+            pandora.Display.image.set_source_length(max(file_paths, key=len))
 
             for file in files:
                 try:
@@ -541,14 +539,14 @@ def blur(files: str | list[str], factor: float, *, optimize: bool = False, masks
 
                             new_image.save(file, optimize=optimize)  # saves image
 
-                            Pandora.Display.image.result(file, "blur", 0, factor)
+                            pandora.Display.image.result(file, "blur", 0, factor)
 
                 except Exception as e:
-                    Pandora.Display.image.result_error(file, "blur", e)
+                    pandora.Display.image.result_error(file, "blur", e)
 
     except Exception as e:
-        Pandora.Display.image.result_error(len(files), "blur", e)
-    Pandora.Display.image.set_source_length(0)  # resets source length after a method ends
+        pandora.Display.image.result_error(len(files), "blur", e)
+    pandora.Display.image.set_source_length(0)  # resets source length after a method ends
 
 
 def resize(files: str | list[str], dimensions: tuple[int, int] | list[int], *, optimize: bool = False, resampling: int = 3, chance_files: float = 1, chance_total: float = 1,
@@ -561,7 +559,7 @@ def resize(files: str | list[str], dimensions: tuple[int, int] | list[int], *, o
 
             # gets size of the largest path for better result formatting
             file_paths = [os.path.abspath(file) for file in files]  # makes sures the full file path is given
-            Pandora.Display.image.set_source_length(max(file_paths, key=len))
+            pandora.Display.image.set_source_length(max(file_paths, key=len))
 
             for file in files:
                 try:
@@ -573,14 +571,14 @@ def resize(files: str | list[str], dimensions: tuple[int, int] | list[int], *, o
                             new_image = image.resize((dimensions[0], dimensions[1]), resampling)
                             new_image.save(file, optimize=optimize)
 
-                            Pandora.Display.image.result(file, "resize", image.size, new_image.size)
+                            pandora.Display.image.result(file, "resize", image.size, new_image.size)
 
                 except Exception as e:
-                    Pandora.Display.image.result_error(file, "resize", e)
+                    pandora.Display.image.result_error(file, "resize", e)
 
     except Exception as e:
-        Pandora.Display.image.result_error(len(files), "resize", e)
-    Pandora.Display.image.set_source_length(0)  # resets source length after a method ends
+        pandora.Display.image.result_error(len(files), "resize", e)
+    pandora.Display.image.set_source_length(0)  # resets source length after a method ends
 
 
 def resolution(files: str | list[str], factor: float, *, optimize: bool = False, resampling: int = 3, chance_files: float = 1, chance_total: float = 1,
@@ -593,7 +591,7 @@ def resolution(files: str | list[str], factor: float, *, optimize: bool = False,
 
             # gets size of the largest path for better result formatting
             file_paths = [os.path.abspath(file) for file in files]  # makes sures the full file path is given
-            Pandora.Display.image.set_source_length(max(file_paths, key=len))
+            pandora.Display.image.set_source_length(max(file_paths, key=len))
 
             for file in files:
                 try:
@@ -605,11 +603,11 @@ def resolution(files: str | list[str], factor: float, *, optimize: bool = False,
                             new_image = image.resize((int(image.width * factor), int(image.height * factor)), resampling)
                             new_image.save(file, optimize=optimize)
 
-                            Pandora.Display.image.result(file, "resolution", image.size, new_image.size)
+                            pandora.Display.image.result(file, "resolution", image.size, new_image.size)
 
                 except Exception as e:
-                    Pandora.Display.image.result_error(file, "resolution", e)
+                    pandora.Display.image.result_error(file, "resolution", e)
 
     except Exception as e:
-        Pandora.Display.image.result_error(len(files), "resolution", e)
-    Pandora.Display.image.set_source_length(0)  # resets source length after a method ends
+        pandora.Display.image.result_error(len(files), "resolution", e)
+    pandora.Display.image.set_source_length(0)  # resets source length after a method ends

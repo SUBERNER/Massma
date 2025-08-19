@@ -1,6 +1,6 @@
-from Pandora import random  # used for seeds
-from Pandora.Filter import *
-import Pandora
+from pandora import random  # used for seeds
+from pandora.Filter import *
+import pandora
 import os
 
 
@@ -53,10 +53,10 @@ def full(source: str, *, deep_search: bool = False, chance_files: float = 1, cha
 
                     filtered_files.append(file)
 
-        Pandora.Display.search.result(source, "full", 0, len(filtered_files))
+        pandora.Display.search.result(source, "full", 0, len(filtered_files))
         return filtered_files  # returns all files in a list
     except Exception as e:
-        Pandora.Display.search.result_error(source, "full", e)
+        pandora.Display.search.result_error(source, "full", e)
         return []
 
 
@@ -155,10 +155,10 @@ def name(source: str, contains: str | list[str], *, deep_search: bool = False, c
 
                     filtered_files.append(file)
 
-        Pandora.Display.search.result(source, "name", 0, len(filtered_files))
+        pandora.Display.search.result(source, "name", 0, len(filtered_files))
         return filtered_files  # returns all files in a list
     except Exception as e:
-        Pandora.Display.search.result_error(source, "name", e)
+        pandora.Display.search.result_error(source, "name", e)
         return []
 
 
@@ -246,10 +246,10 @@ def content(source: str, contains: str | list[str], *, deep_search: bool = False
                             # beginning source is simply how many files it went through
                             filtered_files.append(len(file))
 
-        Pandora.Display.search.result(source, "content", 0, len(filtered_files))
+        pandora.Display.search.result(source, "content", 0, len(filtered_files))
         return filtered_files  # returns all files in a list
     except Exception as e:
-        Pandora.Display.search.result_error(source, "content", e)
+        pandora.Display.search.result_error(source, "content", e)
         return []
 
 
@@ -296,7 +296,7 @@ def inner(files: str | list[str], grouping: bool, *, contains: str | list[str] |
                                 filtered_data.append(list(group))  # puts them pack together and appends to the list to be shuffled
 
                 except Exception as e:
-                    Pandora.Display.inner.result_error(file, "inner", e)
+                    pandora.Display.inner.result_error(file, "inner", e)
                     return []  # returns an empty list
 
         else:  # used to get data from inner normal like method
@@ -325,16 +325,16 @@ def inner(files: str | list[str], grouping: bool, *, contains: str | list[str] |
                                 data = re.sub(contain, replace, data, flags=flags)
 
                 except Exception as e:
-                    Pandora.Display.inner.result_error(file, "inner", e)
+                    pandora.Display.inner.result_error(file, "inner", e)
                     return []  # returns an empty list
 
         # displays and the returns list after finding all the data
-        Pandora.Display.search.result(len(files), "inner", 0, len(filtered_data))
+        pandora.Display.search.result(len(files), "inner", 0, len(filtered_data))
         return filtered_data  # returns a list of all data that was found and would have been altered
 
     except Exception as e:
         print(e)
-        Pandora.Display.inner.result_error(len(files), "inner", e)
+        pandora.Display.inner.result_error(len(files), "inner", e)
         return []  # returns an empty list
 
 
@@ -358,7 +358,7 @@ def outer(files: str | list[str], grouping: bool, *, contains: str | list[str] |
                     filtered_data.append(contain)  # stores contains to data being sent back
 
                 except Exception as e:
-                    Pandora.Display.search.result_error(len(files), "outer", e)
+                    pandora.Display.search.result_error(len(files), "outer", e)
                     return []  # returns an empty list
 
         else:  # used to get data from outer normal like method
@@ -372,16 +372,16 @@ def outer(files: str | list[str], grouping: bool, *, contains: str | list[str] |
                         filtered_data.append(file)  # stores file names being used
 
                 except Exception as e:
-                    Pandora.Display.search.result_error(file, "outer", e)
+                    pandora.Display.search.result_error(file, "outer", e)
                     return []  # returns an empty list
 
 
         # displays and the returns list after finding all the data
-        Pandora.Display.search.result(len(files), "outer", 0, len(filtered_data))
+        pandora.Display.search.result(len(files), "outer", 0, len(filtered_data))
         return filtered_data  # returns a list of all data that was found and would have been altered
 
     except Exception as e:
-        Pandora.Display.search.result_error(len(files), "outer", e)
+        pandora.Display.search.result_error(len(files), "outer", e)
         return []  # returns an empty list
 
 
