@@ -196,6 +196,11 @@ cython_debug/
 *.iml
 *.ipr
 
+# Project Profiles
+.idea/vcs.xml
+.idea/misc.xml
+.idea/inspectionProfiles
+
 # CMake
 cmake-build-*/
 
