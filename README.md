@@ -3,7 +3,6 @@
 [![ReadMe](https://img.shields.io/badge/ReadMe-018EF5?logo=readme&logoColor=fff)](#)
 [![Windows](https://custom-icon-badges.demolab.com/badge/Windows-0078D6?logo=windows11&logoColor=white)](#)
 
-
 # Pandora
 **Python library designed to provide game developers and modders a tool to shuffle and alter and file data.** Allowing game developers and modders to have a prebuilt tool and library to create randomizer addons or mods, also allows for alterations to massize amounts of files all at once. alterable files include: text files, image files, audio files, and file names.
 
