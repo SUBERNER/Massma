@@ -23,12 +23,5 @@ from .Methods import unzip
 # used when users uses "from ______ import *
 __all__ = [""]
 
-# Pandora's metadata
-__version__ = "1.0.1"
-__author__ = "SUBERNER"
-__license__ = "GNU v3"
-__url__ = "https://github.com/SUBERNER/pandora/tree/main"
-__description__ = "Python library designed to provide game developers and modders a tool to log, organize, shuffle, and alter files' data and metadata"
-
 
 

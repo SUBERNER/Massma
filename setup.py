@@ -15,14 +15,10 @@ REQUIRES_PYTHON = ">=3.4.0"
 VERSION = "1.0.1"
 
 # What packages are required for this module to be executed?
-REQUIRED = [
-    'random'
-]
+REQUIRED = []
 
 # What packages are optional?
-EXTRAS = {
-    # 'fancy feature': ['django'],
-}
+EXTRAS = {}
 
 # The rest you shouldn't have to touch too much :)
 # ------------------------------------------------
@@ -106,7 +102,7 @@ setup(
     install_requires=REQUIRED,
     extras_require=EXTRAS,
     include_package_data=True,
-    license='GNU',
+    license='GPLv3',
     classifiers=[
         # Trove classifiers
         # Full list: https://pypi.python.org/pypi?%3Aaction=list_classifiers
