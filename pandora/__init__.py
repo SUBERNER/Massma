@@ -1,5 +1,6 @@
 import random  # used to keep a consistent random seed and format between all methods and classes
 
+# main imports giving users access to the primarily methods
 from . import Display
 from . import Filter
 from .Filter import Logic  # allowing for easier access
@@ -9,6 +10,7 @@ from . import Audio
 from . import Outer
 from . import Inner
 
+# method imports allowing for setting up files for main methods
 from .Methods import seed
 from .Methods import move
 from .Methods import copy

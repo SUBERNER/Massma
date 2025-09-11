@@ -12,7 +12,7 @@ DESCRIPTION = "Python library designed to provide game developers and modders a 
 URL = "https://github.com/SUBERNER/pandora"
 AUTHOR = "SUBERNER"
 REQUIRES_PYTHON = ">=3.4.0"
-VERSION = "1.0.1"
+VERSION = "1.1.0"
 
 # What packages are required for this module to be executed?
 REQUIRED = []
