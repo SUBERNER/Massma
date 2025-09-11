@@ -10,11 +10,11 @@
 Pandora is best utilized with open source games or any games providing modding support or access to existing files. Pandora hard codes the data it alters, requiring brand new files for each randomization or alteration.
 
 ## How to import Pandora
-Main branch: pip install git+https://github.com/SUBERNER/pandora.git@main
-Development branch: pip install git+https://github.com/SUBERNER/pandora.git@development
+Main branch: pip install git+https://github.com/SUBERNER/pandora.git@main  
+Development branch: pip install git+https://github.com/SUBERNER/pandora.git@development   
 
 ## Examples
 <sup>The following examples were not created by pandora but have the possibility to be created with pandora</sup>  
 -[Pokemon randomizer](https://upr-fvx.github.io/universal-pokemon-randomizer-fvx/about.html)  
--[Minecraft loot randomizer](https://modrinth.com/datapack/loot-randomizer)
--[Skyrim World Randomizer](https://www.nexusmods.com/skyrimspecialedition/mods/79974)
+-[Minecraft loot randomizer](https://modrinth.com/datapack/loot-randomizer)  
+-[Skyrim World Randomizer](https://www.nexusmods.com/skyrimspecialedition/mods/79974)  
