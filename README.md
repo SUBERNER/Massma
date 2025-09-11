@@ -4,17 +4,17 @@
 [![Windows](https://custom-icon-badges.demolab.com/badge/Windows-0078D6?logo=windows11&logoColor=white)](#)
 
 # Pandora
-**Python library designed to provide game developers and modders a tool to shuffle and alter and file data.** Allowing game developers and modders to have a prebuilt tool and library to create randomizer addons or mods, also allows for alterations to massize amounts of files all at once. alterable files include: text files, image files, audio files, and file names.
+**Python library designed to provide game developers and modders a tool to shuffle and alter and file data.** Allowing game developers and modders to have a prebuilt tool and library to create randomizer addons or mods, also allows for alterations to massize amounts of files all at once. alterable files include: text files, image files, audio files. file data such as filenames and extensions are also alterable.
 
 ## How Pandora works
-Pandora is best utilized with open source games or any games providing modding support or access to existing files. Pandora hard codes the data it alters.
-
+Pandora is best utilized with open source games or any games providing modding support or access to existing files. Pandora hard codes the data it alters, requiring brand new files for each randomization or alteration.
 
 ## How to import Pandora
-
+Main branch: pip install git+https://github.com/SUBERNER/pandora.git@main
+Development branch: pip install git+https://github.com/SUBERNER/pandora.git@development
 
 ## Examples
 <sup>The following examples were not created by pandora but have the possibility to be created with pandora</sup>  
--Pokemon pokemon randomizer  
--Minecraft crafting randomizer  
+-[Pokemon randomizer](https://upr-fvx.github.io/universal-pokemon-randomizer-fvx/about.html)  
+-[Minecraft loot randomizer](https://modrinth.com/datapack/loot-randomizer)
 -[Skyrim World Randomizer](https://www.nexusmods.com/skyrimspecialedition/mods/79974)
