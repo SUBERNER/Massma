@@ -26,26 +26,36 @@ _colors = Theme({
     "audio": "purple",  # lets users know the alteration was made by the audio methods
 })
 
+# custom logger variables used for special atributes
+_configs = {
+    "logger": None, # will store the logger itself
+    "quit_error": False,
+    "warning_error": False,
+    "raw_error": True
+}
+
 # logs outputs from alterations into terminals with there being a root and individual for each change type
 # changes to root changes all of them but changes to individual only effects that logger
-_loggers = {
-    'root': logging.getLogger(), # root logger, any changes to this effects all other loggers
-    'display': logging.getLogger('display'),
-    'methods': logging.getLogger('methods'),
-    'search': logging.getLogger('search'),
-    'filter': logging.getLogger('filter'),
-    'inner': logging.getLogger('inner'),
-    'outer': logging.getLogger('outer'),
-    'image': logging.getLogger('image'),
-    'audio': logging.getLogger('audio')}
+_loggers = {} # stotres each log and the additional variables they have
+# creates each logger and direcotery to access its variables
+for key in ['root','display','methods','search','filter','inner','outer','image','audio']:
+    _loggers[key] = _configs.copy()
+    # test if key is root, and will make the logger blank, to get the acual root
+    if key != "root":
+        _loggers[key]["logger"] = logging.getLogger(key)
+    else:
+        _loggers[key]["logger"] = logging.getLogger()
 
 # Setup for the default configurations of the loggers
 # Sets up concole and handler to correctly display the logs
 _console = Console(theme=_colors)
 _rich_handler = RichHandler(console=_console, markup=True, omit_repeated_times= False, log_time_format = "[%Y-%m-%d %H:%M:%S]", show_time=False, show_path=False)
 _rich_handler.setFormatter(logging.Formatter("%(name)s <> %(message)s"))
-_loggers["root"].addHandler(_rich_handler) # allows for configuring of log format
-_loggers["root"].setLevel("INFO") # sets default level to info
+_file_handler = FileHandler(pathlib.Path.cwd(), mode='w')
+_loggers["root"]["logger"].addHandler(_rich_handler) # allows for configuring the log's format
+_loggers["root"]["logger"].addHandler(_file_handler) # allows for configuring the log's saveing
+_loggers["root"]["logger"].setLevel("INFO") # sets default level to info
+
 
 # ==========================================
 # GETS & SETS METHODS
@@ -57,14 +67,14 @@ def set_level(logger: str | None, level: str):
     if logger is None: # displays warning if no logger was found
         return None
     # changes the minimum level log that will be displayed
-    _loggers[logger].setLevel(level.upper()) # make sure into its all uppercase
+    _loggers[logger]["logger"].setLevel(level.upper()) # make sure into its all uppercase
 
 def get_level(logger: str | None):
     logger = log_testing(logger)
     if logger is None: # displays warning if no logger was found
         return None
     # sends back the current level of the minimum allowed displayed
-    return logging.getLevelName(_loggers[logger].getEffectiveLevel())
+    return logging.getLevelName(_loggers[logger]["logger"].getEffectiveLevel())
 
 
 # sets and gets if the level of the log is shown
@@ -234,13 +244,14 @@ def display_critical(logger: str | None, message: str):
 # ==========================================
 # INTERNAL METHODS
 # ==========================================
-# find the logger the system is trying to access
+
+# find the logger the system is trying to access to make sure it exists
 def log_testing(target: str | None):
     if target in ['', None, 'root']:  # attempting to access root logger
         return 'root'
     if isinstance(target, str): # if a string, it will clean string before testing
         target = target.strip().lower()
-    if target in _loggers:  # checks if logger attempting to be altered exists, or if user is trying to access the root logger
+    if target in _loggers.keys():  # checks if logger attempting to be altered exists, or if user is trying to access the root logger
         return target
     # warning will occur if none is provided
     # TODO: DISPLAY WARNING
@@ -279,12 +290,12 @@ CODE BELOW IS FOR TESTING
 set_level("root", 'debug')
 print(get_level("root"))
 
-set_show_level("root", True)
+set_show_level("root", False)
 print(get_show_level("root"))
 
 
-_loggers['root'].debug("ROOT INFO123")
-_loggers['root'].info("ROOT INFO123")
-_loggers['root'].warning("ROOT WARNING")
-_loggers['root'].error("ROOT ERROR")
-_loggers['root'].critical("ROOT ERROR")
+_loggers['root']["logger"].debug("ROOT INFO123")
+_loggers['root']["logger"].info("ROOT INFO123")
+_loggers['root']["logger"].warning("ROOT WARNING")
+_loggers['root']["logger"].error("ROOT ERROR")
+_loggers['root']["logger"].critical("ROOT ERROR")
