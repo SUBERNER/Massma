@@ -11,11 +11,11 @@ from logging import FileHandler
 # Used to make Errors, Warnings and other notifications more noticeable
 # Used to distinguish between different typs of alterations
 _colors = Theme({
-    "debug": "bright_white on black",  # Black Background, allows user to know more about how methods are actually working for debugging
-    "info": "bright_white",  # only white text, allows user to see the information about changes made with pandora
-    "warning": "bright_white on yellow3",  # Yellow Background, warning users that the input or output might not be what they wanted
-    "error": "bright_white on red3",  # Red Background, errors that have stopped the code completely, unless told to ignore
-    "critical": "bright_white on orange3",  # orange Background, critical errors will not attempt to run action and will stop code, no matter what
+    "logging.level.debug": "bright_white",  # only white text, allows user to know more about how methods are actually working for debugging
+    "logging.level.info": "bright_white on black",  # Black Background, allows user to see the information about changes made with pandora
+    "logging.level.warning": "bright_white on yellow3",  # Yellow Background, warning users that the input or output might not be what they wanted
+    "logging.level.error": "bright_white on red3",  # Red Background, errors that have stopped the code completely, unless told to ignore
+    "logging.level.critical": "bright_white on orange3",  # orange Background, critical errors will not attempt to run action and will stop code, no matter what
     "display": "bright_white",  # lets users know the alteration was made by the display methods
     "methods": "cyan1",  # lets users know the alteration was made by the display methods
     "search": "green1",  # lets users know the alteration was made by the search methods
@@ -39,69 +39,212 @@ _loggers = {
     'image': logging.getLogger('image'),
     'audio': logging.getLogger('audio')}
 
-# commands used to alter loggers to allow users to get their desired output
-def set_format(logger: str | None, *, show_time: bool = None, show_type: bool = None, show_path: bool = None):
+# Setup for the default configurations of the loggers
+# Sets up concole and handler to correctly display the logs
+_console = Console(theme=_colors)
+_rich_handler = RichHandler(console=_console, markup=True, omit_repeated_times= False, log_time_format = "[%Y-%m-%d %H:%M:%S]", show_time=False, show_path=False)
+_rich_handler.setFormatter(logging.Formatter("%(name)s <> %(message)s"))
+_loggers["root"].addHandler(_rich_handler) # allows for configuring of log format
+_loggers["root"].setLevel("INFO") # sets default level to info
+
+# ==========================================
+# GETS & SETS METHODS
+# ==========================================
+
+# sets and gets the types of display types that will be displayed in the console
+def set_level(logger: str | None, level: str):
     logger = log_testing(logger)
     if logger is None: # displays warning if no logger was found
-        # TODO: DISPLAY WARNING
-        return
+        return None
+    # changes the minimum level log that will be displayed
+    _loggers[logger].setLevel(level.upper()) # make sure into its all uppercase
+
+def get_level(logger: str | None):
+    logger = log_testing(logger)
+    if logger is None: # displays warning if no logger was found
+        return None
+    # sends back the current level of the minimum allowed displayed
+    return logging.getLevelName(_loggers[logger].getEffectiveLevel())
+
+
+# sets and gets if the level of the log is shown
+def set_show_level(logger: str | None, show_level: bool):
+    logger = log_testing(logger)
+    if logger is None: # displays warning if no logger was found
+        return None
     # get existing handler form logger
     handler = handle_finding(logger, RichHandler)
     if handler is None:  # displays warning if no handler was found
-        # TODO: DISPLAY WARNING
-        return
+        return None
+    
+    handler._log_render.show_level = show_level
+    
+def get_show_level(logger: str | None):
+    logger = log_testing(logger)
+    if logger is None: # displays warning if no logger was found
+        return None
+        # get existing handler form logger
+    handler = handle_finding(logger, RichHandler)
+    if handler is None:  # displays warning if no handler was found
+        return None
+    
+    return handler._log_render.show_level
 
-    # makes changes to the format of the logger
-    if show_time is not None:
-        handler._log_render.show_time = show_time
-    if show_type is not None:
-        handler._log_render.show_type = show_type
-    if show_path is not None:
-        handler._log_render.show_path = show_type
 
-# gets the current data about how data is formated from the console
-def get_format():
+# sets and gets if the time of the log being displayed is shown
+def set_show_time(logger: str | None, show_time: bool):
+    logger = log_testing(logger)
+    if logger is None: # displays warning if no logger was found
+        return None
+    # get existing handler form logger
+    handler = handle_finding(logger, RichHandler)
+    if handler is None:  # displays warning if no handler was found
+        return None
+    
+    # determines how to format the data and time, if both data and time are not shown, it will simply turn of the displaying
+    # if one of them is true, it will set either only time, only date, or both
+    show_date = get_show_date(logger)
+    handler._log_render.time_format = date_time_format(show_date, show_time)
+    if handler._log_render.time_format == "": # no date or data will be displayed
+        handler._log_render.show_time == False
+    else:
+        handler._log_render.show_time == True
+    
+    
+def get_show_time(logger: str | None):
+    logger = log_testing(logger)
+    if logger is None: # displays warning if no logger was found
+        return None
+        # get existing handler form logger
+    handler = handle_finding(logger, RichHandler)
+    if handler is None:  # displays warning if no handler was found
+        return None
+
+    # simply stats true or false if there is any resemblence of a time being displayed
+    if "%H:%M:%S" in handler._log_render.time_format:
+        return True
+    else:
+        return False
+
+
+# sets and gets if the date of the log being displayed is shown
+def set_show_date(logger: str | None, show_date: bool):
+    logger = log_testing(logger)
+    if logger is None: # displays warning if no logger was found
+        return None
+    # get existing handler form logger
+    handler = handle_finding(logger, RichHandler)
+    if handler is None:  # displays warning if no handler was found
+        return None
+    
+    # determines how to format the data and time, if both data and time are not shown, it will simply turn of the displaying
+    # if one of them is true, it will set either only time, only date, or both
+    show_time = get_show_time(logger)
+    handler._log_render.time_format = date_time_format(show_date, show_time)
+    if handler._log_render.time_format == "": # no date or data will be displayed
+        handler._log_render.show_time == False
+    else:
+        handler._log_render.show_time == True
+    
+
+    
+def get_show_date(logger: str | None):
+    logger = log_testing(logger)
+    if logger is None: # displays warning if no logger was found
+        return None
+        # get existing handler form logger
+    handler = handle_finding(logger, RichHandler)
+    if handler is None:  # displays warning if no handler was found
+        return None
+    
+    # simply stats true or false if there is any resemblence of a date being displayed
+    if "%Y-%m-%d" in handler._log_render.time_format:
+        return True
+    else:
+        return False
+
+
+# sets and gets if the path and location of where the log was sent from is shown
+def set_show_path(logger: str | None, show_path: bool):
+    logger = log_testing(logger)
+    if logger is None: # displays warning if no logger was found
+        return None
+    # get existing handler form logger
+    handler = handle_finding(logger, RichHandler)
+    if handler is None:  # displays warning if no handler was found
+        return None
+    
+    handler._log_render.show_path = show_path
+    
+def get_show_path(logger: str | None):
+    logger = log_testing(logger)
+    if logger is None: # displays warning if no logger was found
+        return None
+        # get existing handler form logger
+    handler = handle_finding(logger, RichHandler)
+    if handler is None:  # displays warning if no handler was found
+        return None
+    
+    return handler._log_render.show_path
+
+
+# sets and gets if a user can click a link to be sent to the location of the sent log
+def set_link_path(logger: str | None, link_path: bool):
+    logger = log_testing(logger)
+    if logger is None: # displays warning if no logger was found
+        return None
+    # get existing handler form logger
+    handler = handle_finding(logger, RichHandler)
+    if handler is None:  # displays warning if no handler was found
+        return None
+    
+    handler._log_render.link_path = link_path
+    
+def get_link_path(logger: str | None):
+    logger = log_testing(logger)
+    if logger is None: # displays warning if no logger was found
+        return None
+        # get existing handler form logger
+    handler = handle_finding(logger, RichHandler)
+    if handler is None:  # displays warning if no handler was found
+        return None
+    
+    return handler._log_render.link_path
+
+# ==========================================
+# LOGGING OUTPUT METHODS
+# ==========================================
+
+def display_debug(logger: str | None, message: str):
     pass
 
-# sets the types of display types that will be displayed in the console
-def set_level():
+def display_info(logger: str | None, message: str):
     pass
 
-# gets the types of display types that will be displayed in the console
-def get_level():
+def display_warning(logger: str | None, message: str):
     pass
 
-# sets how the logger will save the logs made by the console
-def set_saving():
+def display_error(logger: str | None, message: str):
     pass
 
-# gets the current data about how data is saved from the console
-def get_saving():
+def display_critical(logger: str | None, message: str):
     pass
 
-def display_debug():
-    pass
 
-def display_info():
-    pass
-
-def display_warning():
-    pass
-
-def display_error():
-    pass
-
-def display_critical():
-    pass
-
+# ==========================================
+# INTERNAL METHODS
+# ==========================================
 # find the logger the system is trying to access
 def log_testing(target: str | None):
+    if target in ['', None, 'root']:  # attempting to access root logger
+        return 'root'
     if isinstance(target, str): # if a string, it will clean string before testing
         target = target.strip().lower()
-    if target == any('', None):  # attempting to access root logger
-        return 'root'
     if target in _loggers:  # checks if logger attempting to be altered exists, or if user is trying to access the root logger
         return target
+    # warning will occur if none is provided
+    # TODO: DISPLAY WARNING
+    logging.warning("COULD NOT FIND LOGGER")
     return None # lets system know an error has occurred and nothing was found
 
 # find the handler the system is trying to access
@@ -111,23 +254,37 @@ def handle_finding(target: str | None, handle_type: type):
     for handler in logging.getLogger(target).handlers:
         if isinstance(handler, handle_type):
             return handler
-    # error will occur if none is provided
+    # warning will occur if none is provided
+    # TODO: DISPLAY WARNING
+    logging.warning("COULD NOT FIND HANDLER")
     return None
 
+# correctly displays the date and time based on users wants
+def date_time_format(show_date: bool, show_time: bool):
+    if show_date and show_time:
+        return "[%Y-%m-%d %H:%M:%S]"
+    elif not show_date and show_time:
+        return "[%H:%M:%S]"
+    elif show_date and not show_time:
+        return "[%Y-%m-%d]"
+    else: # both date and time are now showing
+        return "" # tell method to stop displaying time
+
+
+# used by other methods to find and test loggers and handlers, and determines if errors occur during the process
 
 '''
-console.print("[debug]The quick brown fox jumps over the lazy dog 1234567890[/debug]")
-console.print("[info]The quick brown fox jumps over the lazy dog 1234567890[/info]")
-console.print("[warning]The quick brown fox jumps over the lazy dog 1234567890[/warning]")
-console.print("[error]The quick brown fox jumps over the lazy dog 1234567890[/error]")
-console.print("[critical]The quick brown fox jumps over the lazy dog 1234567890[/critical]")
-
-console.print("[display]The quick brown fox jumps over the lazy dog 1234567890")
-console.print("[methods]The quick brown fox jumps over the lazy dog 1234567890")
-console.print("[search]The quick brown fox jumps over the lazy dog 1234567890")
-console.print("[filters]The quick brown fox jumps over the lazy dog 1234567890")
-console.print("[inner]The quick brown fox jumps over the lazy dog 1234567890")
-console.print("[outer]The quick brown fox jumps over the lazy dog 1234567890")
-console.print("[image]The quick brown fox jumps over the lazy dog 1234567890")
-console.print("[audio]The quick brown fox jumps over the lazy dog 1234567890")
+CODE BELOW IS FOR TESTING
 '''
+set_level("root", 'debug')
+print(get_level("root"))
+
+set_show_level("root", True)
+print(get_show_level("root"))
+
+
+_loggers['root'].debug("ROOT INFO123")
+_loggers['root'].info("ROOT INFO123")
+_loggers['root'].warning("ROOT WARNING")
+_loggers['root'].error("ROOT ERROR")
+_loggers['root'].critical("ROOT ERROR")
