@@ -1,11 +1,9 @@
-import pathlib
 # main import for displaying information to users
 import logging
 # formating outputs and making them more understandable
 from rich.console import Console
 from rich.theme import Theme
 from rich.logging import RichHandler
-from logging import FileHandler
 
 # Used to better communicate how methods affected files
 # Used to make Errors, Warnings and other notifications more noticeable
@@ -17,9 +15,9 @@ _colors = Theme({
     "logging.level.error": "bright_white on red3",  # Red Background, errors that have stopped the code completely, unless told to ignore
     "logging.level.critical": "bright_white on orange3",  # orange Background, critical errors will not attempt to run action and will stop code, no matter what
     "display": "bright_white",  # lets users know the alteration was made by the display methods
-    "methods": "cyan1",  # lets users know the alteration was made by the display methods
+    "method": "cyan1",  # lets users know the alteration was made by the display methods
     "search": "green1",  # lets users know the alteration was made by the search methods
-    "filters": "blue1",  # lets users know the alteration was made by the filters methods
+    "filter": "blue3",  # lets users know the alteration was made by the filters methods
     "inner": "red1",  # lets users know the alteration was made by the inner methods
     "outer": "yellow1",  # lets users know the alteration was made by the outer methods
     "image": "hot_pink",  # lets users know the alteration was made by the image methods
@@ -30,32 +28,31 @@ _colors = Theme({
 _configs = {
     "logger": None, # will store the logger itself
     "quit_error": True,
-    "quit_warning": False,
-    "raw_error": True
+    "quit_warning": False
 }
+
+# Setup for the default configurations of the loggers
+# Sets up console and handler to correctly display the logs
+_console = Console(theme=_colors)
+_rich_handler = RichHandler(console=_console, markup=True, omit_repeated_times= False, log_time_format = "[%Y-%m-%d %H:%M:%S]", show_time=False, show_path=False)
 
 # logs outputs from alterations into terminals with there being a root and individual for each change type
 # changes to root changes all of them but changes to individual only effects that logger
 _loggers = {} # stotres each log and the additional variables they have
 # creates each logger and direcotery to access its variables
-for key in ['root','display','methods','search','filter','inner','outer','image','audio']:
+for key in ['root','display','method','search','filter','inner','outer','image','audio']:
     _loggers[key] = _configs.copy()
     # test if key is root, and will make the logger blank, to get the acual root
     if key != "root":
         _loggers[key]["logger"] = logging.getLogger(key)
     else:
         _loggers[key]["logger"] = logging.getLogger()
+    
 
-# Setup for the default configurations of the loggers
-# Sets up console and handler to correctly display the logs
-_console = Console(theme=_colors)
-_rich_handler = RichHandler(console=_console, markup=True, omit_repeated_times= False, log_time_format = "[%Y-%m-%d %H:%M:%S]", show_time=False, show_path=False)
-_rich_handler.setFormatter(logging.Formatter("%(name)s <> %(message)s"))
-_file_handler = FileHandler(pathlib.Path.cwd(), mode='w')
+# also setup for the default configurations of the loggers
+_rich_handler.setFormatter(logging.Formatter("[%(name)s]%(name)+6s[/%(name)s] <> %(message)s"))
 _loggers["root"]["logger"].addHandler(_rich_handler) # allows for configuring the log's format
-_loggers["root"]["logger"].addHandler(_file_handler) # allows for configuring the log's saveing
 _loggers["root"]["logger"].setLevel("INFO") # sets default level to info
-
 
 # ==========================================
 # GETS & SETS METHODS
@@ -116,9 +113,9 @@ def set_show_time(logger: str | None, show_time: bool):
     show_date = get_show_date(logger)
     handler._log_render.time_format = date_time_format(show_date, show_time)
     if handler._log_render.time_format == "": # no date or data will be displayed
-        handler._log_render.show_time == False
+        handler._log_render.show_time = False
     else:
-        handler._log_render.show_time == True
+        handler._log_render.show_time = True
     
     
 def get_show_time(logger: str | None):
@@ -152,9 +149,9 @@ def set_show_date(logger: str | None, show_date: bool):
     show_time = get_show_time(logger)
     handler._log_render.time_format = date_time_format(show_date, show_time)
     if handler._log_render.time_format == "": # no date or data will be displayed
-        handler._log_render.show_time == False
+        handler._log_render.show_time = False
     else:
-        handler._log_render.show_time == True
+        handler._log_render.show_time = True
     
 
     
@@ -232,20 +229,29 @@ def display_debug(logger: str | None, message: str):
     # displays debugging based messages
     _loggers[logger]["logger"].debug(message)
 
-
-
 def display_info(logger: str | None, message: str):
     logger = log_testing(logger)
     if logger is None: # displays warning if no logger was found
         return None
-    # displays debugging based messages
+    # displays information based messages about the results of the changes
     _loggers[logger]["logger"].info(message)
+
+def display_change(logger: str | None, old_value, new_value):
+    logger = log_testing(logger)
+    if logger is None: # displays warning if no logger was found
+        return None
+        # displays information based messages about the results of the changes
+    if old_value != new_value: # if changes where made due to the methods
+        _loggers[logger]["logger"].info(f"[original]{old_value}[/original] [altered]{new_value}[/altered]")
+    else:  # if no changes where made due to the methods
+        _loggers[logger]["logger"].info(f"[unaltered]{old_value}[/unaltered]")
+
 
 def display_warning(logger: str | None, message: str):
     logger = log_testing(logger)
     if logger is None: # displays warning if no logger was found
         return None
-    # displays debugging based messages
+    # displays warnings based messages about what the user should be notifyed about that could alter desired outputs
     _loggers[logger]["logger"].warning(message)
     if _loggers[logger]["quit_warning"] == True:
         quit() # ends running code
@@ -254,7 +260,7 @@ def display_error(logger: str | None, message: str):
     logger = log_testing(logger)
     if logger is None: # displays warning if no logger was found
         return None
-    # displays debugging based messages
+    # displays error based messages that could cause the program to not run correctly
     _loggers[logger]["logger"].error(message)
     if _loggers[logger]["quit_error"] == True:
         quit() # ends running code
@@ -263,10 +269,9 @@ def display_critical(logger: str | None, message: str):
     logger = log_testing(logger)
     if logger is None: # displays warning if no logger was found
         return None
-    # displays debugging based messages
+    # displays critical error based messages that cannot be ignored no matter what
     _loggers[logger]["logger"].critical(message)
     quit()  # you cannot turn off critical quits, no matter what
-
 
 # ==========================================
 # INTERNAL METHODS
@@ -306,21 +311,21 @@ def date_time_format(show_date: bool, show_time: bool):
     else: # both date and time are now showing
         return "" # tell method to stop displaying time
 
-
-# used by other methods to find and test loggers and handlers, and determines if errors occur during the process
-
 '''
 CODE BELOW IS FOR TESTING
 '''
 set_level("root", 'debug')
 print(get_level("root"))
 
-set_show_level("root", False)
+set_show_level("root", True)
 print(get_show_level("root"))
 
 
 _loggers['root']["logger"].debug("ROOT INFO123")
-_loggers['root']["logger"].info("ROOT INFO123")
-_loggers['root']["logger"].warning("ROOT WARNING")
-_loggers['root']["logger"].error("ROOT ERROR")
-_loggers['root']["logger"].critical("ROOT ERROR")
+_loggers['inner']["logger"].info("ROOT INFO123")
+_loggers['outer']["logger"].warning("ROOT WARNING")
+_loggers['search']["logger"].error("ROOT ERROR")
+_loggers['method']["logger"].critical("ROOT ERROR")
+_loggers['audio']["logger"].error("ROOT ERROR")
+_loggers['image']["logger"].critical("ROOT ERROR")
+_loggers['filter']["logger"].critical("ROOT ERROR")
