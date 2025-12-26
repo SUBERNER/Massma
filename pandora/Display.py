@@ -29,8 +29,8 @@ _colors = Theme({
 # custom logger variables used for special atributes
 _configs = {
     "logger": None, # will store the logger itself
-    "quit_error": False,
-    "warning_error": False,
+    "quit_error": True,
+    "quit_warning": False,
     "raw_error": True
 }
 
@@ -47,7 +47,7 @@ for key in ['root','display','methods','search','filter','inner','outer','image'
         _loggers[key]["logger"] = logging.getLogger()
 
 # Setup for the default configurations of the loggers
-# Sets up concole and handler to correctly display the logs
+# Sets up console and handler to correctly display the logs
 _console = Console(theme=_colors)
 _rich_handler = RichHandler(console=_console, markup=True, omit_repeated_times= False, log_time_format = "[%Y-%m-%d %H:%M:%S]", show_time=False, show_path=False)
 _rich_handler.setFormatter(logging.Formatter("%(name)s <> %(message)s"))
@@ -190,7 +190,7 @@ def get_show_path(logger: str | None):
     logger = log_testing(logger)
     if logger is None: # displays warning if no logger was found
         return None
-        # get existing handler form logger
+    # get existing handler form logger
     handler = handle_finding(logger, RichHandler)
     if handler is None:  # displays warning if no handler was found
         return None
@@ -226,19 +226,46 @@ def get_link_path(logger: str | None):
 # ==========================================
 
 def display_debug(logger: str | None, message: str):
-    pass
+    logger = log_testing(logger)
+    if logger is None: # displays warning if no logger was found
+        return None
+    # displays debugging based messages
+    _loggers[logger]["logger"].debug(message)
+
+
 
 def display_info(logger: str | None, message: str):
-    pass
+    logger = log_testing(logger)
+    if logger is None: # displays warning if no logger was found
+        return None
+    # displays debugging based messages
+    _loggers[logger]["logger"].info(message)
 
 def display_warning(logger: str | None, message: str):
-    pass
+    logger = log_testing(logger)
+    if logger is None: # displays warning if no logger was found
+        return None
+    # displays debugging based messages
+    _loggers[logger]["logger"].warning(message)
+    if _loggers[logger]["quit_warning"] == True:
+        quit() # ends running code
 
 def display_error(logger: str | None, message: str):
-    pass
+    logger = log_testing(logger)
+    if logger is None: # displays warning if no logger was found
+        return None
+    # displays debugging based messages
+    _loggers[logger]["logger"].error(message)
+    if _loggers[logger]["quit_error"] == True:
+        quit() # ends running code
 
 def display_critical(logger: str | None, message: str):
-    pass
+    logger = log_testing(logger)
+    if logger is None: # displays warning if no logger was found
+        return None
+    # displays debugging based messages
+    _loggers[logger]["logger"].critical(message)
+    quit()  # you cannot turn off critical quits, no matter what
 
 
 # ==========================================
@@ -254,8 +281,7 @@ def log_testing(target: str | None):
     if target in _loggers.keys():  # checks if logger attempting to be altered exists, or if user is trying to access the root logger
         return target
     # warning will occur if none is provided
-    # TODO: DISPLAY WARNING
-    logging.warning("COULD NOT FIND LOGGER")
+    display_warning("display", "Could not find Logger")
     return None # lets system know an error has occurred and nothing was found
 
 # find the handler the system is trying to access
@@ -266,8 +292,7 @@ def handle_finding(target: str | None, handle_type: type):
         if isinstance(handler, handle_type):
             return handler
     # warning will occur if none is provided
-    # TODO: DISPLAY WARNING
-    logging.warning("COULD NOT FIND HANDLER")
+    display_warning("display", "Could not find Handler")
     return None
 
 # correctly displays the date and time based on users wants
