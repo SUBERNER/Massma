@@ -2,25 +2,18 @@ import random  # used to keep a consistent random seed and format between all me
 
 # main imports giving users access to the primarily methods
 from . import Display
-from . import Filter
-from .Filter import Logic  # allowing for easier access
-from . import Search
-from . import Image
-from . import Audio
-from . import Outer
-from . import Inner
 
 # method imports allowing for setting up files for main methods
-from .Methods import seed
-from .Methods import move
-from .Methods import copy
-from .Methods import delete
-from .Methods import create_folder
-from .Methods import create_file
-from .Methods import redo_name
-from .Methods import redo_extension
-from .Methods import zip
-from .Methods import unzip
+from .Method import seed
+from .Method import move
+from .Method import copy
+from .Method import delete
+from .Method import create_folder
+from .Method import create_file
+from .Method import redo_name
+from .Method import redo_extension
+from .Method import zip
+from .Method import unzip
 
 # used when users uses "from ______ import *
 __all__ = [""]
